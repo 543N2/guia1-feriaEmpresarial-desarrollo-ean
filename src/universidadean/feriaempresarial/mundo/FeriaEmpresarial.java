@@ -445,10 +445,77 @@ public class FeriaEmpresarial {
 
     /**
      * Método para la extensión 1
-     * @return respuesta1
+     * El metodo recorre las empresas registradas, tomando el numero de expositores por zona.
+     * @return zona_mas_expositores
      */
     public String metodo1() {
-        return "Respuesta 1";
+
+        String zona_mas_expositores = "";
+
+        // Crea e inicializa en cero el array de asistentes por zona:
+        // [0]: NORTE, [1]: ORIENTE, [2]: SUR, [3]: OCCIDENTE, [4]: CENTRO
+        int asistentes_por_zona[] = new int[5];
+        for (int i = 0; i < 5; i++) {
+            asistentes_por_zona[i] = 0;
+        }
+
+        //Cuenta numero de asistentes por zona.
+        for (Empresa empresa : empresas) {
+            if (empresa.darTipo() == Empresa.EXPOSITORA) {
+                String nombreEmpresa = empresa.darNombre();
+                for (int i = 0; i < puestos.length; i++) {
+                    if (puestos[i].darNombreEmpresa() == nombreEmpresa) {
+                        int asistentes = empresa.darNumeroPersonasAsistentes();
+                        String zona = puestos[i].darZona();
+                        switch (zona) {
+                            case Puesto.ZONA_NORTE:
+                                asistentes_por_zona[0] += asistentes;
+                                break;
+                            case Puesto.ZONA_ORIENTE:
+                                asistentes_por_zona[1] += asistentes;
+                                break;
+                            case Puesto.ZONA_SUR:
+                                asistentes_por_zona[2] += asistentes;
+                                break;
+                            case Puesto.ZONA_OCCIDENTE:
+                                asistentes_por_zona[3] += asistentes;
+                                break;
+                            case Puesto.ZONA_CENTRO:
+                                asistentes_por_zona[4] += asistentes;
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Determina que zona tiene mayor numero de asistentes
+        int mayorAsistencia = 0;
+        for (int i = 0; i < 5; i++) {
+            if (asistentes_por_zona[i] > mayorAsistencia) {
+                mayorAsistencia = asistentes_por_zona[i];
+                switch (i) {
+                    case 0:
+                        zona_mas_expositores = Puesto.ZONA_NORTE;
+                        break;
+                    case 1:
+                        zona_mas_expositores = Puesto.ZONA_ORIENTE;
+                        break;
+                    case 2:
+                        zona_mas_expositores = Puesto.ZONA_SUR;
+                        break;
+                    case 3:
+                        zona_mas_expositores = Puesto.ZONA_OCCIDENTE;
+                        break;
+                    case 4:
+                        zona_mas_expositores = Puesto.ZONA_CENTRO;
+                        break;
+
+                }
+            }
+        }
+                     return zona_mas_expositores;
+
     }
 
     /**
