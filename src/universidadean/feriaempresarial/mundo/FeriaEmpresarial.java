@@ -523,7 +523,53 @@ public class FeriaEmpresarial {
      * @return respuesta2
      */
     public String metodo2() {
-        return "Respuesta 2";
+
+        String respuestaPuntoEquilibrio;
+
+        // Reune numero de puestos por zona
+        int[] puestosPorZona = new int[]{
+                FeriaEmpresarial.NUM_PUESTOS_NORTE,
+                FeriaEmpresarial.NUM_PUESTOS_SUR,
+                FeriaEmpresarial.NUM_PUESTOS_ORIENTE,
+                FeriaEmpresarial.NUM_PUESTOS_OCCIDENTE,
+                FeriaEmpresarial.NUM_PUESTOS_CENTRO
+        };
+
+        // Reune numero maximo de expositores por zona
+        int[] maxExpositoresPorZona = new int[]
+                {
+                        FeriaEmpresarial.MAX_PERSONAS_NORTE,
+                        FeriaEmpresarial.MAX_PERSONAS_SUR,
+                        FeriaEmpresarial.MAX_PERSONAS_ORIENTE,
+                        FeriaEmpresarial.MAX_PERSONAS_OCCIDENTE,
+                        FeriaEmpresarial.MAX_PERSONAS_CENTRO
+                };
+
+        // Calcula numero maximo total de expositores permitido en la feria
+        int maxExpositoresTotal = 0;
+        for (int i = 0; i < 5; i++) {
+            maxExpositoresTotal += puestosPorZona[i] * maxExpositoresPorZona[i];
+        }
+
+        // Calcula numero actual de expositores en la feria
+        int cantidadActualExpositores = 0;
+        for (Empresa empresa : empresas) {
+            if (empresa.darTipo() == Empresa.EXPOSITORA) {
+                cantidadActualExpositores += empresa.darNumeroPersonasAsistentes();
+            }
+        }
+
+        // Calcula porcentaje de expositores en la feria
+        float porcentajeExpositores = (float) cantidadActualExpositores / maxExpositoresTotal;
+
+        // Determina si se ha cumplido el punto de equilibrio de expositores
+        if (porcentajeExpositores >= 0.6) {
+            respuestaPuntoEquilibrio = "El punto de equilibrio se ha cumplido";
+        } else {
+            respuestaPuntoEquilibrio = "El punto de equilibrio no se ha cumplido";
+        }
+
+        return respuestaPuntoEquilibrio;
     }
 
 }
